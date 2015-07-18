@@ -6,5 +6,6 @@ Date: 2015-07-18
 Author: Mahmood S. Zargar
 Maintainer: Mahmood S. Zargar <mahmood@gmail.com>
 Description: This package provides a bare-bones interface to OrientDB's REST API. The package is currently limited to querying, but will eventually cover commands and batches in the future.
-License: Apache 2.0
+License: Apache-2.0
+Imports: RCurl, jsonlite
 LazyData: TRUE

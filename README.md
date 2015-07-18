@@ -10,7 +10,7 @@ OrientR is a REST API wrapper for OrientDB. It allows you to run queries on Orie
 
 ## <a name="#install"></a> Install
 
-```{r, eval=FALSE}
+```{r}
 install.packages("devtools")
 devtools::install_github("retrography/OrientR")
 ```
@@ -25,7 +25,7 @@ library(OrientR)
 
 ### Generate database URL
 ```{r}
-db = getDB(database = "OpenBeer", server = "localhost", username = "admin", password = "admin", port = "2480")
+db = getDB(database = "OpenBeer", host = "localhost", username = "admin", password = "admin", port = "2480")
 ```
 
 ### Run a query
@@ -33,4 +33,11 @@ db = getDB(database = "OpenBeer", server = "localhost", username = "admin", pass
 query = "SELECT FROM Beer"
 runQuery(db, query, batch = 100)
 ```
+
+
+## <a name="#issues"></a> Known Issues
+
+* ```exeCommand``` and ```launchBatch``` functions have not been implemented yet.
+* Some text fields including invalid characters may break the JSON conversion engine (```jsonlite```).
+
 

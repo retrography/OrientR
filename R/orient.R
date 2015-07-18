@@ -2,9 +2,9 @@ library(RCurl)
 library(jsonlite)
 
 getDB <-
-  function(database, server = "localhost", username = "admin", password = "admin", port = "2480") {
+  function(database, host = "localhost", username = "admin", password = "admin", port = "2480") {
     up <- paste(username, password, sep = ":")
-    sp <- paste(server, port, sep = ":")
+    sp <- paste(host, port, sep = ":")
     base <- paste(up, sp, sep = "@")
     paste("http:/", base, "query", database, "sql", sep = "/")
   }

@@ -1,1 +1,6 @@
-exportPattern("^[[:alpha:]]+")
+export(getDB)
+export(runQuery)
+
+importFrom(RCurl, curlEscape)
+importFrom(RCurl, getURL)
+importFrom(jsonlite, fromJSON)
