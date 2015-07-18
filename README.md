@@ -25,13 +25,13 @@ library(OrientR)
 
 ### Generate database URL
 ```{r}
-db = getDB(database = "OpenBeer", host = "localhost", username = "admin", password = "admin", port = "2480")
+db <- getDB(database = "OpenBeer", host = "localhost", username = "admin", password = "admin", port = "2480")
 ```
 
 ### Run a query
 ```{r}
-query = "SELECT FROM Beer"
-runQuery(db, query, batch = 100)
+query <- "SELECT FROM Beer"
+resultSet <- runQuery(db, query, batch = 100)
 ```
 
 
