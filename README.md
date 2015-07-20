@@ -37,7 +37,5 @@ resultSet <- runQuery(db, query, batch = 100)
 
 ## <a name="#issues"></a> Known Issues
 
-* Many functions have not been implemented yet (see [OrientDB's REST API manual for a list of possible extensions](http://orientdb.com/docs/1.7.8/orientdb.wiki/OrientDB-REST.html)).
-* Some text fields including invalid characters may break the JSON conversion engine (```jsonlite```).
-
+* Only Query function has been implemented in this preliminary version (see [OrientDB's REST API manual for a list of possible extensions](http://orientdb.com/docs/1.7.8/orientdb.wiki/OrientDB-REST.html)).
 
