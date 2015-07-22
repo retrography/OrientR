@@ -48,8 +48,10 @@ runQuery <-
     query <- curlEscape(query)
     request <- paste(db, query, batch, sep = '/')
     response <- getURL(request)
-    # The following line is a work around for a bug in "jsonlite" package that prevents it from parsing valid jsons containing strings with newline character
-    response <- gsub("\n", " ", response)
+    # The following line is a work around for a possible bug in "orientdb" that ends up returning invalid json
+    response <- gsub("\n", "\\\\n", response) %>%
+      gsub("\r", "\\\\r", .) %>%
+      gsub("\r", "\\\\r", .)
     results <- fromJSON(response, ...)
     results <- results$result
     fts <-
