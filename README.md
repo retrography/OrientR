@@ -25,19 +25,17 @@ library(OrientR)
 
 ### Generate database URL
 ```{r}
-db = getDB(database = "OpenBeer", host = "localhost", username = "admin", password = "admin", port = "2480")
+db <- getDB(database = "OpenBeer", host = "localhost", username = "admin", password = "admin", port = "2480")
 ```
 
 ### Run a query
 ```{r}
-query = "SELECT FROM Beer"
-runQuery(db, query, batch = 100)
+query <- "SELECT FROM Beer"
+resultSet <- runQuery(db, query, batch = 100)
 ```
 
 
 ## <a name="#issues"></a> Known Issues
 
-* ```exeCommand``` and ```launchBatch``` functions have not been implemented yet.
-* Some text fields including invalid characters may break the JSON conversion engine (```jsonlite```).
-
+* Only Query function has been implemented in this preliminary version (see [OrientDB's REST API manual for a list of possible extensions](http://orientdb.com/docs/1.7.8/orientdb.wiki/OrientDB-REST.html)).
 

@@ -15,6 +15,8 @@ runQuery <-
     query <- curlEscape(query)
     request <- paste(db, query, batch, sep = '/')
     response <- getURL(request)
+    # The following line is a work around for a bug in "jsonlite" package that prevents it from parsing valid jsons containing strings with newline character
+    response <- gsub("\n", " ", response)
     results <- fromJSON(response)
     results <- results$result
 

@@ -25,7 +25,7 @@ Batch size limit (similar to SQL \code{LIMIT} keyword).
 Specifies whether the complex datatypes have to be converted. This option currently enables \code{RID} and \code{DateTime} conversion. Defaults to TRUE.
 }
   \item{clean}{
-Specified whether auto-generated response fields (e.g. \code{@class, @rid, @fieldTypes}) have to be removed from the final results. Defaults to TRUE.
+Specifies whether auto-generated response fields (e.g. \code{@class, @rid, @fieldTypes}) have to be removed from the final results. Defaults to TRUE.
 }
 }
 \details{
