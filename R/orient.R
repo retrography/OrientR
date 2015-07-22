@@ -1,5 +1,6 @@
 library(RCurl)
 library(jsonlite)
+library(plyr)
 
 getDB <-
   function(database, host = "localhost", username = "admin", password = "admin", port = "2480") {
