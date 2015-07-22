@@ -1,6 +1,8 @@
-library(RCurl)
-library(jsonlite)
-library(plyr)
+require(RCurl)
+require(jsonlite)
+require(tidyr)
+require(dplyr)
+require(lubridate)
 
 getDB <-
   function(database, host = "localhost", username = "admin", password = "admin", port = "2480") {
@@ -10,44 +12,86 @@ getDB <-
     paste("http:/", base, "query", database, "sql", sep = "/")
   }
 
+null.conv <- function(df) {
+  cols <- colnames(df)
+  for (col in cols) {
+    df[sapply(df[[col]], length) == 0, col] <- NA
+  }
+  df
+}
+
+auto.clean <- function(df) {
+  df["@type"] <-
+    df["@version"] <-
+    df["@rid"] <-
+    df["@fieldTypes"] <-
+    df["@class"] <- NULL
+  df
+}
+
+ft.list <- function(ft) {
+  uft <- strsplit(ft[!is.na(ft)], ",") %>%
+    unlist %>%
+    unique %>%
+    sapply(.,function(x)
+      strsplit(x, "=")[[1]][2])
+  names(uft) <-
+    sapply(names(uft), function(x)
+      strsplit(x, "=")[[1]][1])
+  uft
+}
+
+
 runQuery <-
-  function(db, query, batch = -1, convert = TRUE, clean = TRUE) {
+  function(db, query, batch = -1, conv.dates = TRUE, date.fmt = "ymd", auto.na = TRUE, rm.meta = TRUE, conv.rid = FALSE, unwind = FALSE, formats =
+             c(), ...) {
     query <- curlEscape(query)
     request <- paste(db, query, batch, sep = '/')
     response <- getURL(request)
     # The following line is a work around for a bug in "jsonlite" package that prevents it from parsing valid jsons containing strings with newline character
     response <- gsub("\n", " ", response)
-    results <- fromJSON(response)
+    results <- fromJSON(response, ...)
     results <- results$result
+    fts <-
+      if (!is.null(results[["@fieldTypes"]]))
+        ft.list(results[["@fieldTypes"]])
+    else
+      c()
 
-    if (convert & !is.null(results[["@fieldTypes"]])) {
-      ft <- unique(unlist(strsplit(results[["@fieldTypes"]], ",")))
+    results <- if (rm.meta) auto.clean(results)
 
-      for (i in 1:length(ft)) {
-        field_type <- ft[[i]]
-        field <- strsplit(field_type, "=")[[1]][1]
-        type <- strsplit(field_type, "=")[[1]][2]
-
-        if (type == "x") {
-          results[grep(field_type, results[["@fieldTypes"]]), field] <-
-            unlist(lapply(results[grep(field_type, results[["@fieldTypes"]]), field], function(x)
-              strsplit(x, ":")[[1]][2]))
-          results[,field] <- as.integer(results[[field]])
-        } else if (type == "t") {
-          results[,field] <- as.Date(results[[field]])
-        }
+    else
+      results
+    if (!conv.dates)
+      fts <- fts[fts != "t"]
+    if (!conv.rid)
+      fts <- fts[fts != "x"]
+    if (!unwind)
+      fts <- fts[fts != "g"]
+    fts <- c(fts[!names(fts) %in% names(formats)], formats)
+    for (col in names(fts)) {
+      if (any(fts[[col]] %in% c("list", "vector", "g"))) {
+        results[col] <- null.conv(results[col])
+        results <- unnest_(results, col)
       }
 
+      if (any(fts[[col]] %in% c("x", "rid"))) {
+        results[col] <- null.conv(results[col])
+        results[[col]] <-
+          sapply(results[[col]], function(x)
+            strsplit(x, ":")[[1]][2])
+      } else if (any(fts[[col]] %in% c("t", "time", "date", "datetime"))) {
+        results[col] <- null.conv(results[col])
+        results[[col]] <-
+          parse_date_time(results[[col]], date.fmt)
+      }
     }
 
-    if (clean) {
-      results["@type"] <-
-        results["@version"] <-
-        results["@rid"] <-
-        results["@fieldTypes"] <-
-        results["@class"] <- NULL
-    }
-    results
+    if (auto.na)
+      null.conv(results)
+    else
+      results
+
   }
 
 exeCommand <-
