@@ -19,7 +19,7 @@ conv.null <- function(df, cols=colnames(df)) {
   df
 }
 
-conv.rid <- function(df, cols) {
+conv.rid <- function(df, cols=colnames(df)) {
   for (col in cols) {
     df <- conv.null(df, col)
     df[[col]] <- sapply(df[[col]], function(x)
@@ -29,7 +29,7 @@ conv.rid <- function(df, cols) {
   df
 }
 
-unwind <- function(df, cols) {
+unwind <- function(df, cols=colnames(df)) {
   for (col in cols) {
     df <- conv.null(df, col)
     df <- unnest_(df, col)
@@ -37,7 +37,7 @@ unwind <- function(df, cols) {
   df
 }
 
-conv.date <- function(df, cols, fmt = "ymd") {
+conv.date <- function(df, cols=colnames(df), fmt = "ymd") {
   for (col in cols) {
     df <- conv.null(df, col)
     df[[col]] <- parse_date_time(df[[col]], fmt)
