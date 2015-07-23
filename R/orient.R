@@ -20,9 +20,9 @@ conv.null <- function(df, cols=colnames(df)) {
   df
 }
 
-conv.rid <- function(df, cols) {
+conv.rid <- function(df, cols=colnames(df)) {
   for (col in cols) {
-    df <- conv.null(df, col)
+    df <- conv.null(df, cols=col)
     df[[col]] <- sapply(df[[col]], function(x)
       strsplit(x, ":")[[1]][2]) %>%
       as.numeric()
@@ -30,17 +30,17 @@ conv.rid <- function(df, cols) {
   df
 }
 
-unwind <- function(df, cols) {
+unwind <- function(df, cols=colnames(df)) {
   for (col in cols) {
-    df <- conv.null(df, col)
+    df <- conv.null(df, cols=col)
     df <- unnest_(df, col)
   }
   df
 }
 
-conv.date <- function(df, cols, fmt = "ymd") {
+conv.date <- function(df, cols=colnames(df), fmt = "ymd") {
   for (col in cols) {
-    df <- conv.null(df, col)
+    df <- conv.null(df, cols=col)
     df[[col]] <- parse_date_time(df[[col]], fmt)
   }
   df
@@ -104,13 +104,13 @@ runQuery <-
 
     for (col in names(fts)) {
       if (any(fts[[col]] %in% c("list", "vector", "g", "z"))) {
-        results <- unwind(results, col)
+        results <- unwind(results, cols=col)
       }
 
       if (any(fts[[col]] %in% c("x", "rid"))) {
-        results <- conv.rid(results, col)
+        results <- conv.rid(results, cols=col)
       } else if (any(fts[[col]] %in% c("t", "time", "date", "datetime"))) {
-        results <- conv.date(results, col, date.fmt)
+        results <- conv.date(results, cols=col, fmt=date.fmt)
       }
     }
 
