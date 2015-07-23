@@ -20,6 +20,16 @@ null.conv <- function(df) {
   df
 }
 
+unrid <- function(df, cols) {
+  for (col in cols) {
+    null.conv(df[col])
+    df[[col]] <- sapply(df[[col]], function(x)
+      strsplit(x, ":")[[1]][2]) %>%
+      as.numeric()
+  }
+  df
+}
+
 auto.clean <- function(df) {
   df["@type"] <-
     df["@version"] <-
