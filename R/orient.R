@@ -86,8 +86,7 @@ runQuery <-
     else
       c()
 
-    results <- if (rm.meta)
-      auto.clean(results)
+    if (rm.meta) results <- auto.clean(results)
 
     # Supress all the name in the vector with more than one value
     fts <- fts[sapply(names(fts), function(x) length(fts[names(fts)==x])==1)]
