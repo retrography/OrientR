@@ -12,20 +12,35 @@ getDB <-
     paste("http:/", base, "query", database, "sql", sep = "/")
   }
 
-null.conv <- function(df) {
-  cols <- colnames(df)
+conv.null <- function(df, cols=colnames(df)) {
   for (col in cols) {
     df[sapply(df[[col]], length) == 0, col] <- NA
   }
   df
 }
 
-unrid <- function(df, cols) {
+conv.rid <- function(df, cols) {
   for (col in cols) {
-    null.conv(df[col])
+    df <- conv.null(df, col)
     df[[col]] <- sapply(df[[col]], function(x)
       strsplit(x, ":")[[1]][2]) %>%
       as.numeric()
+  }
+  df
+}
+
+unwind <- function(df, cols) {
+  for (col in cols) {
+    df <- conv.null(df, col)
+    df <- unnest_(df, col)
+  }
+  df
+}
+
+conv.date <- function(df, cols, fmt = "ymd") {
+  for (col in cols) {
+    df <- conv.null(df, col)
+    df[[col]] <- parse_date_time(df[[col]], fmt)
   }
   df
 }
@@ -70,40 +85,38 @@ runQuery <-
     else
       c()
 
-    results <- if (rm.meta) auto.clean(results)
+    results <- if (rm.meta)
+      auto.clean(results)
 
-    else
-      results
+    # Supress all the name in the vector with more than one value
+    fts <- fts[sapply(names(fts), function(x) length(fts[names(fts)==x])==1)]
+
     if (!conv.dates)
       fts <- fts[fts != "t"]
     if (!conv.rid)
       fts <- fts[fts != "x"]
     if (!unwind)
-      fts <- fts[fts != "g"]
+      fts <- fts[!fts %in% c("g", "z")]
+
+    # Add the manually mentioned formats, overriding the eventual automatic conversions on the same fields
     fts <- c(fts[!names(fts) %in% names(formats)], formats)
+
     for (col in names(fts)) {
       if (any(fts[[col]] %in% c("list", "vector", "g", "z"))) {
-        results[col] <- null.conv(results[col])
-        results <- unnest_(results, col)
+        results <- unwind(results, col)
       }
 
       if (any(fts[[col]] %in% c("x", "rid"))) {
-        results[col] <- null.conv(results[col])
-        results[[col]] <-
-          sapply(results[[col]], function(x)
-            strsplit(x, ":")[[1]][2])
+        results <- conv.rid(results, col)
       } else if (any(fts[[col]] %in% c("t", "time", "date", "datetime"))) {
-        results[col] <- null.conv(results[col])
-        results[[col]] <-
-          parse_date_time(results[[col]], date.fmt)
+        results <- conv.date(results, col, date.fmt)
       }
     }
 
     if (auto.na)
-      null.conv(results)
+      conv.null(results)
     else
       results
-
   }
 
 exeCommand <-

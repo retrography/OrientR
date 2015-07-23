@@ -1,5 +1,10 @@
 export(getDB)
 export(runQuery)
+export(unwind)
+export(conv.date)
+export(conv.null)
+export(conv.rid)
+
 
 importFrom(RCurl, curlEscape)
 importFrom(RCurl, getURL)
