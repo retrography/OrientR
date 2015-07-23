@@ -82,7 +82,7 @@ runQuery <-
       fts <- fts[fts != "g"]
     fts <- c(fts[!names(fts) %in% names(formats)], formats)
     for (col in names(fts)) {
-      if (any(fts[[col]] %in% c("list", "vector", "g"))) {
+      if (any(fts[[col]] %in% c("list", "vector", "g", "z"))) {
         results[col] <- null.conv(results[col])
         results <- unnest_(results, col)
       }
