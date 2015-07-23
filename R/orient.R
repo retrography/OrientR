@@ -1,7 +1,8 @@
 require(RCurl)
 require(jsonlite)
-require(tidyr)
+require(magrittr)
 require(dplyr)
+require(tidyr)
 require(lubridate)
 
 getDB <-
