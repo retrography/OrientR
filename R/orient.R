@@ -82,7 +82,7 @@ runQuery <-
     request <- paste(db, curlEscape(query), batch, sep = '/')
     response <- getURL(request) %>%
     # The following lines are a workaround for a possible bug in "orientdb" that ends up returning invalid json
-      igsub(response, "\n", "\\\\n") %>%
+      igsub("\n", "\\\\n") %>%
       igsub("\r", "\\\\r") %>%
       igsub("\r", "\\\\r")
     results <- fromJSON(response, ...)[["result"]]
