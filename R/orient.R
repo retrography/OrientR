@@ -1,9 +1,9 @@
-require(RCurl)
-require(jsonlite)
-require(magrittr)
-require(dplyr)
-require(tidyr)
-require(lubridate)
+library(RCurl)
+library(jsonlite)
+library(magrittr)
+library(dplyr)
+library(tidyr)
+library(lubridate)
 
 getDB <-
   function(database, host = "localhost", username = "admin", password = "admin", port = "2480") {
@@ -42,6 +42,14 @@ conv.date <- function(df, cols=colnames(df), fmt = "ymd") {
   for (col in cols) {
     df <- conv.null(df, cols=col)
     df[[col]] <- parse_date_time(df[[col]], fmt)
+  }
+  df
+}
+
+conv.factor <- function(df, cols=colnames(df)) {
+  for (col in cols) {
+    df <- conv.null(df, cols=col)
+    df[[col]] <- as.factor(df[[col]])
   }
   df
 }
@@ -110,6 +118,8 @@ runQuery <-
         results <- conv.rid(results, cols=col)
       } else if (any(fts[[col]] %in% c("t", "time", "date", "datetime"))) {
         results <- conv.date(results, cols=col, fmt=date.fmt)
+      } else if (any(fts[[col]] %in% c("factor"))) {
+        results <- conv.factor(results, cols=col)
       }
     }
 

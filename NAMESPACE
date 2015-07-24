@@ -4,6 +4,7 @@ export(unwind)
 export(conv.date)
 export(conv.null)
 export(conv.rid)
+export(conv.factor)
 
 
 importFrom(RCurl, curlEscape)
@@ -11,3 +12,4 @@ importFrom(RCurl, getURL)
 importFrom(jsonlite, fromJSON)
 importFrom(tidyr, unnest_)
 importFrom(lubridate, parse_date_time)
+importFrom(magrittr)
