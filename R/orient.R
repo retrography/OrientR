@@ -1,7 +1,6 @@
 library(RCurl)
 library(jsonlite)
 library(magrittr)
-library(dplyr)
 library(tidyr)
 library(lubridate)
 
@@ -67,7 +66,7 @@ ft.list <- function(ft) {
   uft <- strsplit(ft[!is.na(ft)], ",") %>%
     unlist %>%
     unique %>%
-    sapply(.,function(x)
+    sapply(function(x)
       strsplit(x, "=")[[1]][2])
   names(uft) <-
     sapply(names(uft), function(x)
@@ -75,24 +74,21 @@ ft.list <- function(ft) {
   uft
 }
 
+igsub <- function(x, pattern, replacement, ...) gsub(pattern, replacement, x, ...)
 
 runQuery <-
   function(db, query, batch = -1, conv.dates = TRUE, date.fmt = "ymd", auto.na = TRUE, rm.meta = TRUE, conv.rid = FALSE, unwind = FALSE, formats =
              c(), ...) {
-    query <- curlEscape(query)
-    request <- paste(db, query, batch, sep = '/')
-    response <- getURL(request)
-    # The following line is a work around for a possible bug in "orientdb" that ends up returning invalid json
-    response <- gsub("\n", "\\\\n", response) %>%
-      gsub("\r", "\\\\r", .) %>%
-      gsub("\r", "\\\\r", .)
-    results <- fromJSON(response, ...)
-    results <- results$result
+    request <- paste(db, curlEscape(query), batch, sep = '/')
+    response <- getURL(request) %>%
+    # The following lines are a workaround for a possible bug in "orientdb" that ends up returning invalid json
+      igsub(response, "\n", "\\\\n") %>%
+      igsub("\r", "\\\\r") %>%
+      igsub("\r", "\\\\r")
+    results <- fromJSON(response, ...)[["result"]]
     fts <-
       if (!is.null(results[["@fieldTypes"]]))
-        ft.list(results[["@fieldTypes"]])
-    else
-      c()
+        ft.list(results[["@fieldTypes"]]) else c()
 
     if (rm.meta) results <- auto.clean(results)
 
