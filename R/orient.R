@@ -24,7 +24,7 @@ conv.rid <- function(df, cols=colnames(df)) {
     df <- conv.null(df, cols=col)
     df[[col]] <- sapply(df[[col]], function(x)
       strsplit(x, ":")[[1]][2]) %>%
-      as.numeric()
+      as.integer()
   }
   df
 }
