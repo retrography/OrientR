@@ -80,11 +80,7 @@ runQuery <-
   function(db, query, batch = -1, conv.dates = TRUE, date.fmt = "ymd", auto.na = TRUE, rm.meta = TRUE, conv.rid = FALSE, unwind = FALSE, formats =
              c(), ...) {
     request <- paste(db, curlEscape(query), batch, sep = '/')
-    response <- getURL(request) %>%
-    # The following lines are a workaround for a possible bug in "orientdb" that ends up returning invalid json
-      igsub("\n", "\\\\n") %>%
-      igsub("\r", "\\\\r") %>%
-      igsub("\r", "\\\\r")
+    response <- getURL(request, .mapUnicode = FALSE)
     results <- fromJSON(response, ...)[["result"]]
     fts <-
       if (!is.null(results[["@fieldTypes"]]))
