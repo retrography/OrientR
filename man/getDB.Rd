@@ -2,10 +2,10 @@
 \alias{getDB}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-Generating a Database URL
+Generating a Database Connection String
 }
 \description{
-This function generates a database connection URL based on the entered parameters. The resulting URL has to be passed into other functions (e.g. \code{runQuery}) so that they know what database to connect to.
+This function generates a database connection string based on the parameters. The resulting URL has to be passed into the other functions (e.g. \code{runQuery}) in order to indicate the database  to be queried.
 }
 \usage{
 getDB(database, host = "localhost", username = "admin", password = "admin", port = "2480")
@@ -13,7 +13,7 @@ getDB(database, host = "localhost", username = "admin", password = "admin", port
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{database}{
-The name of the database you want to open.
+The name of the database you would like to open.
 }
   \item{host}{
 The host name or the IP address of the host.
@@ -25,7 +25,7 @@ The username you would like to use for databased access.
 The corresponding poassword.
 }
   \item{port}{
-The HTTP port number, if you have changed the default 2480.
+The HTTP port number, in case you are not using the default 2480.
 }
 }
 \details{
@@ -54,21 +54,19 @@ The HTTP port number, if you have changed the default 2480.
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-##---- Should be DIRECTLY executable !! ----
-##-- ==>  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
+getDB("GreatfulDeadConcerts",
+      host = "dbserver.local",
+      username = "root",
+      password = "toor",
+      port = "1234")
 
-## The function is currently defined as
-function (database, server = "localhost", username = "admin",
-    password = "admin", port = "2480")
-{
-    up <- paste(username, password, sep = ":")
-    sp <- paste(server, port, sep = ":")
-    base <- paste(up, sp, sep = "@")
-    paste("http:/", base, "query", database, "sql", sep = "/")
-  }
+# [1] "http://root:toor@dbserver.local:1234/query/GreatfulDeadConcerts/sql"
+
+
+getDB("Beers")
+
+# [1] "http://admin:admin@localhost:2480/query/Beers/sql"
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
-\keyword{ ~kwd1 }
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
+\keyword{ connection string }
+\keyword{ database }
+\keyword{ URL }
