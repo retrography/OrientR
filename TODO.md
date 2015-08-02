@@ -1,4 +1,5 @@
 # TO DO
+- [ ] Implement `exeCommand`
 - [ ] Implement full type handling for schemaless mode 
 - [ ] Parallel loops 
 - [ ] Complete help files
