@@ -122,9 +122,19 @@ runQuery <-
   }
 
 exeCommand <-
-  function(db, command) {
-    # To be implemented
-    print("Function not implemented yet.")
+    function(db, command, batch = -1, ...) {
+      db <- stringr::str_replace(db, "/query/", "/command/")
+      request <- paste(db, curlEscape(command), batch, sep = '/')
+      print(request)
+      response <- RCurl::postForm(request, .mapUnicode = FALSE)
+      results <- fromJSON(response, ...)
+      return (results)
+
+      #library(httr)
+      #r <- POST("http://www.datasciencetoolkit.org/text2people",
+      #          body = "Tim O'Reilly, Archbishop Huxley")
+      #stop_for_status(r)
+      #content(r, "parsed", "application/json")
   }
 
 launchBatch <-
