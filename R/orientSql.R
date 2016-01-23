@@ -1,11 +1,11 @@
 orientSql <-
-  function(orientConnect,database, query, batch = -1, conv.dates = TRUE, date.fmt = "ymd", auto.na = TRUE, rm.meta = TRUE, conv.rid = FALSE, unwind = FALSE, formats =
+  function(orient,database, query, batch = -1, conv.dates = TRUE, date.fmt = "ymd", auto.na = TRUE, rm.meta = TRUE, conv.rid = FALSE, unwind = FALSE, formats =
              c(), ...) {
-    orientConnect <- sub(pattern = "https?://","",orientConnect)
-    orient<-paste("http:/", orientConnect, "query", database, "sql", sep = "/")
-
+    orient<-paste("http:/", orient, "query", database, "sql", sep = "/")
     request <- paste(orient, curlEscape(query), batch, sep = '/')
     response <- getURL(request, .mapUnicode = FALSE)
+
+    if(!int0(grep(pattern="select",query,ignore.case = T))){
     results <- fromJSON(response, ...)[["result"]]
     fts <-
       if (!is.null(results[["@fieldTypes"]]))
@@ -44,4 +44,16 @@ orientSql <-
       conv.null(results)
     else
       results
+    } else if(!int0(grep(pattern="insert",query,ignore.case = T))){
+
+    } else if(!int0(grep(pattern="update",query,ignore.case = T))){
+
+    } else if(!int0(grep(pattern="delete",query,ignore.case = T))){
+
+    }else {
+
+    }
+
+
+
   }

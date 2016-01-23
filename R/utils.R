@@ -73,3 +73,6 @@ rmNullObs <- function(x) {
   x <- Filter(Negate(is.NullOb), x)
   lapply(x, function(x) if (is.list(x)) rmNullObs(x) else x)
 }
+
+# to check if it was integer and his value is 0
+int0=function(a){return ((length(a) == 0) && (typeof(a) == "integer"))}
