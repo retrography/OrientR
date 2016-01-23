@@ -1,3 +1,41 @@
+#' @rdname orientSql
+#' @export
+#'
+#' @title
+#' Execute a SQL query against the OrientDB database
+#'
+#' @description
+#' \code{orientSql} Execute a SQL query against the OrientDB database.
+#'
+#' @author
+#' Mahmood S. Zargar \email{mahmood@gmail.com}
+#' Mohamed Karim Bouaziz \email{mohamed.karim.bouaziz@gmail.com}
+#'
+#' @seealso \code{\link{orientConnect}}, \code{\link{orientDataBases}}, \code{\link{orientDataBaseDetail}}
+#'
+#' @param orient An element created with \code{orientConnect}.
+#'
+#' @param database The database to be user in SQL Query.
+#'
+#' @param batch The number of record in return data (in SELECT Query), default is \code{-1} it means unlimited records.
+#'
+#' @param conv.dates
+#'
+#' @param auto.na
+#' @param date.fmt
+#' @param rm.meta
+#' @param auto.na
+#' @param conv.rid
+#' @param unwind
+#' @param formats
+#'
+#' @examples \dontrun{
+#' ## See examples for \code{orientConnect} to know how \code{orient} element was created.
+#' ## See examples for \code{orientDataBases} to know how \code{database} element was created.
+#' query<-"select * from OUser"
+#' database<-"Employer"
+#' orientSql(orient,database, query)
+#'
 orientSql <-
   function(orient,database, query, batch = -1, conv.dates = TRUE, date.fmt = "ymd", auto.na = TRUE, rm.meta = TRUE, conv.rid = FALSE, unwind = FALSE, formats =
              c(),verbos=FALSE, ...) {

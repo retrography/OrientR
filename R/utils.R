@@ -1,9 +1,3 @@
-library(RCurl)
-library(jsonlite)
-library(magrittr)
-library(tidyr)
-library(lubridate)
-
 conv.null <- function(df, cols=colnames(df)) {
   for (col in cols) {
     df[sapply(df[[col]], length) == 0, col] <- NA
@@ -68,11 +62,5 @@ ft.list <- function(ft) {
 
 igsub <- function(x, pattern, replacement, ...) gsub(pattern, replacement, x, ...)
 
-# to Delete all list(null)
-rmNullObs <- function(x) {
-  x <- Filter(Negate(is.NullOb), x)
-  lapply(x, function(x) if (is.list(x)) rmNullObs(x) else x)
-}
-
 # to check if it was integer and his value is 0
-int0=function(a){return ((length(a) == 0) && (typeof(a) == "integer"))}
+int0 <- function(a){return ((length(a) == 0) && (typeof(a) == "integer"))}
