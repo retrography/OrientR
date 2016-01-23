@@ -1,11 +1,11 @@
 orientSql <-
   function(orient,database, query, batch = -1, conv.dates = TRUE, date.fmt = "ymd", auto.na = TRUE, rm.meta = TRUE, conv.rid = FALSE, unwind = FALSE, formats =
-             c(), ...) {
+             c(),verbos=FALSE, ...) {
     orient<-paste("http:/", orient, "query", database, "sql", sep = "/")
     request <- paste(orient, curlEscape(query), batch, sep = '/')
     response <- getURL(request, .mapUnicode = FALSE)
 
-    if(!int0(grep(pattern="select",query,ignore.case = T))){
+    if(!int0(grep(pattern="^select",query,ignore.case = T))){
     results <- fromJSON(response, ...)[["result"]]
     fts <-
       if (!is.null(results[["@fieldTypes"]]))
@@ -44,13 +44,29 @@ orientSql <-
       conv.null(results)
     else
       results
-    } else if(!int0(grep(pattern="insert",query,ignore.case = T))){
+    } else if(!int0(grep(pattern="^insert",query,ignore.case = T))){
 
-    } else if(!int0(grep(pattern="update",query,ignore.case = T))){
+      #       if(verbos){
+      #       tableQueried<-sub("^insert into ","",query,ignore.case = T)
+      #       tableQueried<-sub("\\s+.+$","",tableQueried,ignore.case = T)
+      #       message(paste0("Record inserted into ",tableQueried," table!"))}
 
-    } else if(!int0(grep(pattern="delete",query,ignore.case = T))){
+    } else if(!int0(grep(pattern="^update",query,ignore.case = T))){
+
+      #       if(verbos){
+      #       tableQueried<-sub("^update ","",query,ignore.case = T)
+      #       tableQueried<-sub("\\s+.+$","",tableQueried,ignore.case = T)
+      #       message(paste0("Record updated into ",tableQueried," table!"))}
+
+    } else if(!int0(grep(pattern="^delete",query,ignore.case = T))){
+
+      #       if(verbos){
+      #       tableQueried<-sub("^delete ","",query,ignore.case = T)
+      #       tableQueried<-sub("\\s+.+$","",tableQueried,ignore.case = T)
+      #       message(paste0("Record deleted from ",tableQueried," table!"))}
 
     }else {
+      warning("Bad Query !!")
 
     }
 
