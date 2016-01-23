@@ -1,6 +1,6 @@
 #' @rdname orientConnect
 #' @export
-#' @import RCurl jsonlite tidyr lubridate magrittr
+#'
 #'
 #' @title
 #' Connect to OrientDB DataBase

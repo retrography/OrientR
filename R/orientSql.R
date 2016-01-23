@@ -1,4 +1,8 @@
 #' @rdname orientSql
+#' @importFrom RCurl getURL curlEscape
+#' @importFrom jsonlite fromJSON
+#' @importFrom lubridate parse_date_time
+#' @importFrom tidyr %>% extract complete unnest_
 #' @export
 #'
 #' @title
