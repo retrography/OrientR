@@ -25,13 +25,13 @@ library(OrientR)
 
 ### Generate connection string
 ```{r}
-db <- getDB(database = "OpenBeer", host = "localhost", username = "admin", password = "admin", port = "2480")
+orient <- orientConnect(database = "OpenBeer", host = "localhost", username = "admin", password = "admin", port = "2480")
 ```
 
-### Run a query
+### Run a query (only Select)
 ```{r}
 query <- "SELECT FROM Beer"
-resultSet <- runQuery(db, query, batch = 100)
+resultSet <- orientSql(orient, query, batch = 100)
 ```
 
 
