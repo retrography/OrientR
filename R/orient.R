@@ -6,6 +6,11 @@ library(lubridate)
 
 getDB <-
   function(database, host = "localhost", username = "admin", password = "admin", port = "2480") {
+    
+    #removing @ from admin or password and replacing with %40
+    username<-gsub("@","%40",username)
+    password<-gsub("@","%40",password)
+    
     up <- paste(username, password, sep = ":")
     sp <- paste(host, port, sep = ":")
     base <- paste(up, sp, sep = "@")
