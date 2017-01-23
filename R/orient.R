@@ -81,7 +81,13 @@ runQuery <-
              c(), ...) {
     request <- paste(db, curlEscape(query), batch, sep = '/')
     response <- getURL(request, .mapUnicode = FALSE)
-    results <- fromJSON(response, ...)[["result"]]
+    results <- fromJSON(response, ...)
+	
+	if (!is.null(results[["errors"]])) 
+		results <- results[["errors"]]
+	else
+		results <- results[["result"]]
+	
     fts <-
       if (!is.null(results[["@fieldTypes"]]))
         ft.list(results[["@fieldTypes"]]) else c()
