@@ -1,0 +1,12 @@
+# TO DO
+- [ ] Implement `exeCommand`
+- [ ] Implement full type handling for schemaless mode 
+- [ ] Parallel loops 
+- [ ] Complete help files
+- [ ] Create unit tests
+- [ ] Convert loops into functional form
+- [ ] Use data.table
+- [ ] Implement a batch-based fetch
+- [ ] Implement direct class fetch
+- [ ] Direct import to igraph
+- [ ] Adopt read.table's syntax (breaking change)

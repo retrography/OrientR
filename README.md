@@ -18,12 +18,12 @@ devtools::install_github("retrography/OrientR")
 
 ## <a name="#use"></a> Use
 
-### Load library
+### Load the library
 ```{r}
 library(OrientR)
 ```
 
-### Generate database URL
+### Generate connection string
 ```{r}
 db <- getDB(database = "OpenBeer", host = "localhost", username = "admin", password = "admin", port = "2480")
 ```
