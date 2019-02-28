@@ -25,7 +25,7 @@ library(OrientR)
 
 ### Generate connection string
 ```{r}
-db <- getDB(database = "OpenBeer", host = "localhost", username = "admin", password = "admin", port = "2480")
+db <- getDB(database = "OpenBeer", host = "localhost", username = "root", password = "orientdb", port = "2480")
 ```
 
 ### Run a query
