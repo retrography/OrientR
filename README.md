@@ -31,9 +31,9 @@ db <- getDB(database = "OpenBeer", host = "localhost", username = "admin", passw
 ### Run a query
 ```{r}
 query <- "SELECT FROM Beer"
-resultSet <- runQuery(db, query, batch = 100)
+resultSet <- runQuery(db, 'SELECT @rid AS id, name AS beer, out_HasBrewery.in.name AS brewery FROM Beer UNWIND brewery', batch = 100)
 ```
-
+Note: It has come to my attention that OrientR fails to parse the data types for queries using the * selector (or equivalent). This is a known error now, but unfortunately I don't have the time to debug it. Feel free to make a pull request.
 
 ## <a name="#issues"></a> Known Issues
 
